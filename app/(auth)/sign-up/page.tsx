@@ -109,8 +109,8 @@ const SignUp = () => {
         return;
       }
 
-      alert("User registered successfully!");
-      router.push("/"); // redirect after success
+      alert("Registration successful! Please check your Gmail inbox to verify your account.");
+      router.push("/sign-in"); // redirect after success
     } catch (err) {
       console.error("Unexpected error:", err);
       alert("An unexpected error occurred.");
@@ -138,7 +138,7 @@ const SignUp = () => {
           type="button"
           onClick={generateRandomUsername}
           className="py-2 px-4"
-          title="generate random username">
+          title="Generate random username">
             <HiSparkles className="w-4 h-4" />
           </button>
         </div>

@@ -5,6 +5,7 @@ export const ComponentNavbarSkeleton = () => {
       <div className="flex gap-4">
         <div className="h-10 w-10 bg-neutral-800 rounded-md" />
         <div className="h-10 w-10 bg-neutral-800 rounded-md" />
+        <div className="h-10 w-10 bg-neutral-800 rounded-md" />
       </div>
     </nav>
   );
