@@ -120,6 +120,26 @@ export const useChat = (username: string) => {
           ]);
         }
       )
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'messages',
+          filter: `chat_id=eq.${chatId}`,
+        },
+        (payload) => {
+          const updatedMessage = payload.new as TMessage;
+
+          setMessages((prev) =>
+            prev.map((msg) =>
+              msg.id === updatedMessage.id
+                ? { ...msg, deleted_at: updatedMessage.deleted_at }
+                : msg
+            )
+          );
+        }
+      )
       .subscribe();
 
     return () => {

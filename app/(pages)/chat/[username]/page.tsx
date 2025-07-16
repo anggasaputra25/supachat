@@ -23,7 +23,7 @@ const Chat = () => {
   return (
     <div className="h-screen flex flex-col">
       {loading ? <NavbarChatSkeleton /> : <NavbarChat profile={profile} />}
-      <div className="h-full mx-10 py-2">
+      <div className="h-full mx-10 py-2 flex flex-col">
         <ComponentMessages content={messages} />
       </div>
       <div className="w-full px-10 space-y-5 mb-5">

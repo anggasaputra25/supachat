@@ -8,7 +8,7 @@ import { TProfile } from '../types/profile';
 import Swal from 'sweetalert2';
 import { supabase } from '@/lib/supabaseClient';
 
-const ComponentCardContact = ({ profile }: { profile: TProfile | null }) => {
+const ComponentCardContact = ({ profile, isContact }: { profile: TProfile | null, isContact: boolean }) => {
   const [myProfile, setMyProfile] = useState<TProfile | null>(null)
   const [showMenu, setShowMenu] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
@@ -92,7 +92,7 @@ const ComponentCardContact = ({ profile }: { profile: TProfile | null }) => {
           />
           <div className="flex flex-col justify-center w-full">
             <h2 className="text-2xl font-bold">{profile?.name}</h2>
-            <p className="font-medium text-neutral-400">{profile?.lastMessage ? profile?.lastMessage : '@'+profile?.username}</p>
+            <p className="font-medium text-neutral-400">{isContact ? '@'+profile?.username : profile?.lastMessage || 'Say hello ✌'}</p>
           </div>
         </Link>
 
@@ -110,8 +110,9 @@ const ComponentCardContact = ({ profile }: { profile: TProfile | null }) => {
           {showMenu && (
             <div className="absolute right-0 top-10 bg-neutral-800 border border-neutral-700 rounded-sm shadow-lg w-40 z-10">
               <button className="block w-full text-left px-4 py-2 hover:bg-neutral-700">View Profile</button>
-              <button className="block w-full text-left px-4 py-2 hover:bg-neutral-700">Clear Message (for me)</button>
-              <button className="block w-full text-left px-4 py-2 hover:bg-neutral-700" onClick={handleDelete}>Delete Contact</button>
+              {isContact &&
+                <button className="block w-full text-left px-4 py-2 hover:bg-neutral-700" onClick={handleDelete}>Delete Contact</button>
+              }
             </div>
           )}
         </div>

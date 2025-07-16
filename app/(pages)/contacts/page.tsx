@@ -85,7 +85,7 @@ const Contacts = () => {
           </>
         ) : (
           contacts.map((contact) => (
-            <ComponentCardContact key={contact.id} profile={contact} />
+            <ComponentCardContact key={contact.id} profile={contact} isContact={true} />
           ))
         )}
         {loading ? (
