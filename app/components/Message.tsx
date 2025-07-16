@@ -3,6 +3,7 @@ import { TMessage } from "../types/message";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { supabase } from "@/lib/supabaseClient";
 import Swal from "sweetalert2";
+import { FaCheck, FaCheckDouble } from "react-icons/fa6";
 
 const ComponentMessages = ({ content }: { content: TMessage[] }) => {
   const handleDelete = async (id: string) => {
@@ -52,7 +53,7 @@ const ComponentMessages = ({ content }: { content: TMessage[] }) => {
           }`}
         >
           <div
-            className={`mt-2 py-3 rounded-md rounded-t-none max-w-full w-fit text-white px-3 z-20 prose ${
+            className={`mt-2 py-3 rounded-md rounded-t-none max-w-full w-fit text-white px-3 z-20 flex items-end gap-2 prose ${
               msg.isSender
                 ? "bg-violet-800 self-end ml-auto rounded-l-md"
                 : "bg-neutral-800 self-start mr-auto rounded-r-md"
@@ -61,6 +62,15 @@ const ComponentMessages = ({ content }: { content: TMessage[] }) => {
             <Markdown>
               {msg.deleted_at ? "Message has been deleted" : msg.content}
             </Markdown>
+            {msg.isSender && (
+              <>
+                {msg.is_read ? (
+                  <FaCheckDouble className="w-3 h-3" />
+                ) : (
+                  <FaCheck className="w-3 h-3" />
+                )}
+              </>
+            )}
           </div>
 
           <div

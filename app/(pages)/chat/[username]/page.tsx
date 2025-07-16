@@ -23,7 +23,13 @@ const Chat = () => {
   return (
     <div className="h-screen flex flex-col">
       {loading ? <NavbarChatSkeleton /> : <NavbarChat profile={profile} />}
-      <div className="h-full mx-10 py-2 flex flex-col">
+      <div className="h-full px-10 py-2 flex flex-col overflow-y-scroll
+        [&::-webkit-scrollbar]:w-2
+        [&::-webkit-scrollbar-track]:rounded-full
+        [&::-webkit-scrollbar-track]:bg-transparent
+        [&::-webkit-scrollbar-thumb]:rounded-full
+        [&::-webkit-scrollbar-thumb]:bg-gray-300
+      ">
         <ComponentMessages content={messages} />
       </div>
       <div className="w-full px-10 space-y-5 mb-5">
