@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
+import Swal from "sweetalert2";
 
 export default function SignIn() {
   const router = useRouter();
@@ -30,8 +31,17 @@ export default function SignIn() {
       });
 
       if (error) {
-        console.error("Login error:", error);
-        alert("Username or password is wrong");
+        Swal.fire({
+          toast: true,
+          position: 'top-end',
+          icon: 'error',
+          title: 'Username or password is wrong',
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          background: '#171717',
+          color: '#fff',
+        });
         return;
       }
 
@@ -48,9 +58,16 @@ export default function SignIn() {
         console.warn("Logged in, but failed to fetch profile:", profileError.message);
       }
 
-
-      alert("Logged in successfully!");
-      router.push("/");
+      Swal.fire({
+        icon: "success",
+        title: "Success!",
+        text: "Logged in successfully!",
+        confirmButtonText: "OK",
+        background: '#171717',
+        color: '#fff',
+      }).then(() => {
+        router.push("/home");
+      });
     } catch (err) {
       console.error("Unexpected login error:", err);
       alert("An unexpected error occurred.");
@@ -65,12 +82,14 @@ export default function SignIn() {
       <p className="font-medium text-neutral-400 mb-10">First time here? <Link href={'sign-up'} className="text-white">Sign Up for free!</Link></p>
       <form className="w-full max-w-sm mx-auto space-y-5" onSubmit={handleForm}>
         <input
+          required
           name="email"
           type="email"
           placeholder="Email"
           className="w-full px-4 py-2 rounded-sm focus:outline-none focus:ring-2 focus:ring-white bg-neutral-900 font-medium"
         />
         <input
+          required
           name="password"
           type="password"
           placeholder="Password"
@@ -94,7 +113,18 @@ export default function SignIn() {
         <div className="bg-neutral-400 h-0.5 w-full"></div>
       </div>
       <button
-        className="w-full bg-neutral-200 py-2 rounded-xl hover:bg-neutral-400 transition font-bold text-black max-w-sm flex justify-center items-center gap-2"
+        className="w-full bg-neutral-200 py-2 rounded-xl hover:bg-neutral-400 transition font-bold text-black max-w-sm flex justify-center items-center gap-2 cursor-pointer"
+        onClick={(e) => {
+          e.preventDefault();
+          Swal.fire({
+            icon: "info",
+            title: "Coming Soon!",
+            text: "This feature is coming soon!",
+            background: '#171717',
+            color: '#fff',
+            confirmButtonText: "OK",
+          })
+        }}
       >
         <Image src='/images/google_image.png' width={30} height={30} alt="google logo" />
         Sign In with Google

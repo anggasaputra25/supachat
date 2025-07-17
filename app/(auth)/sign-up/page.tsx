@@ -5,6 +5,7 @@ import { HiSparkles } from "react-icons/hi";
 import { useDebounce } from "use-debounce";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
+import Swal from "sweetalert2";
 
 const SignUp = () => {
   const router = useRouter();
@@ -42,7 +43,7 @@ const SignUp = () => {
 
   const generateRandomUsername = () => {
     const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    const random = Array.from({ length: 12 }, () =>
+    const random = Array.from({ length: 6 }, () =>
       chars[Math.floor(Math.random() * chars.length)]
     ).join("");
     setUsername(random);
@@ -70,7 +71,33 @@ const SignUp = () => {
 
       // Confirm password match
       if (password !== confirmPassword) {
-        alert("Passwords do not match.");
+        Swal.fire({
+          toast: true,
+          position: 'top-end',
+          icon: 'error',
+          title: 'Passwords do not match.',
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          background: '#171717',
+          color: '#fff',
+        });
+        return;
+      }
+
+      // Validate username
+      if (!usernameStatus) {
+        Swal.fire({
+          toast: true,
+          position: 'top-end',
+          icon: 'error',
+          title: 'Username is already in use',
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          background: '#171717',
+          color: '#fff',
+        });
         return;
       }
 
@@ -81,11 +108,19 @@ const SignUp = () => {
       });
 
       if (signUpError) {
-        if (signUpError.message.includes("User already registered")) {
-          alert("Email is already in use.");
-        } else {
-          alert(signUpError.message);
-        }
+        Swal.fire({
+          toast: true,
+          position: 'top-end',
+          icon: 'error',
+          title: signUpError.message.includes("already registered")
+            ? 'Email is already registered'
+            : signUpError.message,
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          background: '#171717',
+          color: '#fff',
+        });
         return;
       }
 
@@ -105,12 +140,30 @@ const SignUp = () => {
       ]);
 
       if (profileError) {
-        console.error(profileError.message);
+        Swal.fire({
+          toast: true,
+          position: 'top-end',
+          icon: 'error',
+          title: 'Email is already registered',
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          background: '#171717',
+          color: '#fff',
+        });
         return;
       }
 
-      alert("Registration successful! Please check your Gmail inbox to verify your account.");
-      router.push("/sign-in"); // redirect after success
+      Swal.fire({
+        icon: "success",
+        title: "Registration Successful!",
+        text: "Please check your Gmail inbox to verify your account.",
+        confirmButtonText: "OK",
+        background: '#171717',
+        color: '#fff',
+      }).then(() => {
+        router.push("/sign-in");
+      });
     } catch (err) {
       console.error("Unexpected error:", err);
       alert("An unexpected error occurred.");
@@ -122,11 +175,12 @@ const SignUp = () => {
   return (
     <div className="flex flex-col justify-center items-center min-h-screen">
       <h1 className="font-bold text-3xl mb-5">Hello, Welcome to Supachat!</h1>
-      <p className="font-medium text-neutral-400 mb-10">Have an account? <Link href={'/'} className="text-white">Sign In here!</Link></p>
+      <p className="font-medium text-neutral-400 mb-10">Have an account? <Link href={'/sign-in'} className="text-white">Sign In here!</Link></p>
       <form className="w-full max-w-sm mx-auto space-y-5" onSubmit={handleForm}>
         <div className={`flex rounded-sm bg-neutral-900 ${!usernameStatus? 'border border-red-600' : ''} ${usernameStatus && username.length > 0? 'border border-green-600' : ''}`}>
           <input
             required
+            minLength={6}
             name="username"
             type="text"
             value={username}
@@ -159,6 +213,7 @@ const SignUp = () => {
         />
         <input
           required
+          minLength={6}
           name="password"
           type="password"
           placeholder="Password"
@@ -166,6 +221,7 @@ const SignUp = () => {
         />
         <input
           required
+          minLength={6}
           name="confirmPassword"
           type="password"
           placeholder="Confirm Password"
