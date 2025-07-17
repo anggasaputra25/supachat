@@ -12,6 +12,7 @@ export const useChat = (username: string) => {
 
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
+  // Fetch profile, chat, and messages
   useEffect(() => {
     const fetchChatData = async () => {
       const { data: authUser } = await supabase.auth.getUser();
@@ -71,7 +72,7 @@ export const useChat = (username: string) => {
 
       setChatId(chat_id);
 
-      const { data: messages, error: msgErr } = await supabase
+      const { data: loadedMessages, error: msgErr } = await supabase
         .from('messages')
         .select('*')
         .eq('chat_id', chat_id)
@@ -83,7 +84,7 @@ export const useChat = (username: string) => {
       }
 
       setMessages(
-        messages.map((msg) => ({
+        loadedMessages.map((msg) => ({
           ...msg,
           isSender: msg.sender_id === currentUserId,
         }))
@@ -95,6 +96,7 @@ export const useChat = (username: string) => {
     fetchChatData();
   }, [username]);
 
+  // Realtime listener for INSERT and UPDATE
   useEffect(() => {
     if (!chatId || !profile?.id) return;
 
@@ -108,16 +110,32 @@ export const useChat = (username: string) => {
           table: 'messages',
           filter: `chat_id=eq.${chatId}`,
         },
-        (payload) => {
+        async (payload) => {
           const message = payload.new as TMessage;
+          const isSender = message.sender_id === profile.id;
 
+          // Tambahkan pesan ke state
           setMessages((prev) => [
             ...prev,
             {
               ...message,
-              isSender: message.sender_id === profile.id,
+              isSender,
             },
           ]);
+
+          // Jika bukan pengirim, tandai sebagai sudah dibaca
+          if (!isSender) {
+            await supabase
+              .from('messages')
+              .update({ is_read: true })
+              .eq('id', message.id);
+
+            setMessages((prev) =>
+              prev.map((msg) =>
+                msg.id === message.id ? { ...msg, is_read: true } : msg
+              )
+            );
+          }
         }
       )
       .on(
@@ -134,7 +152,11 @@ export const useChat = (username: string) => {
           setMessages((prev) =>
             prev.map((msg) =>
               msg.id === updatedMessage.id
-                ? { ...msg, deleted_at: updatedMessage.deleted_at }
+                ? {
+                    ...msg,
+                    deleted_at: updatedMessage.deleted_at,
+                    is_read: updatedMessage.is_read,
+                  }
                 : msg
             )
           );
@@ -146,6 +168,41 @@ export const useChat = (username: string) => {
       supabase.removeChannel(channel);
     };
   }, [chatId, profile?.id]);
+
+  // Tandai pesan sebagai sudah dibaca jika user buka halaman ini
+  useEffect(() => {
+    const markMessagesAsRead = async () => {
+      if (!profile?.id || !chatId || messages.length === 0) return;
+
+      const unreadMessages = messages.filter(
+        (msg) => !msg.is_read && msg.sender_id !== profile.id
+      );
+
+      if (unreadMessages.length === 0) return;
+
+      const { error } = await supabase
+        .from('messages')
+        .update({ is_read: true })
+        .in(
+          'id',
+          unreadMessages.map((msg) => msg.id)
+        );
+
+      if (error) {
+        console.error('Failed to update is_read:', error);
+      } else {
+        setMessages((prev) =>
+          prev.map((msg) =>
+            unreadMessages.find((um) => um.id === msg.id)
+              ? { ...msg, is_read: true }
+              : msg
+          )
+        );
+      }
+    };
+
+    markMessagesAsRead();
+  }, [messages, profile?.id, chatId]);
 
   const handleInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const textarea = textareaRef.current;

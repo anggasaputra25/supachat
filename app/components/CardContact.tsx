@@ -78,18 +78,24 @@ const ComponentCardContact = ({ profile, isContact }: { profile: TProfile | null
 
   return (
     <div className="p-3 w-1/3">
-      <div className="bg-neutral-900 p-3 rounded-sm flex gap-4 relative">
+      <div className="bg-neutral-900 p-3 rounded-sm flex gap-4">
         <Link 
           href={`/chat/${profile?.username}`}
           className="flex gap-4 flex-grow"
         >
-          <Image
-            src={profile?.avatar_url || '/images/profile.png'}
-            width={80}
-            height={80}
-            alt={'Profile ' + profile?.username}
-            className="w-20 rounded-sm"
-          />
+          <div className="relative">
+            <Image
+              src={profile?.avatar_url || '/images/profile.png'}
+              width={80}
+              height={80}
+              alt={'Profile ' + profile?.username}
+              className="w-20 rounded-sm"
+            />
+            {/* {!isRead && 
+              <div className="absolute bg-red-600 -top-2 -right-2 w-5 h-5 rounded-full flex justify-center items-center"></div>
+            } */}
+            <p className={`absolute bg-red-600 -top-2 -right-2 px-2.5 rounded-full ${isContact || profile?.unreadCount == 0? 'hidden' : ''}`}>{profile?.unreadCount}</p>
+          </div>
           <div className="flex flex-col justify-center w-full">
             <h2 className="text-2xl font-bold">{profile?.name}</h2>
             <p className="font-medium text-neutral-400">{isContact ? '@'+profile?.username : profile?.lastMessage || 'Say hello ✌'}</p>

@@ -10,6 +10,7 @@ export const useChats = () => {
   const [contacts, setContacts] = useState<TProfile[]>([]);
 
   const fetchContacts = async (userId: string) => {
+    console.log("Fetching contacts for user:", userId);
     const { data: chatList, error } = await supabase
       .from('chats')
       .select(`
@@ -52,14 +53,14 @@ export const useChats = () => {
 
         const user1 = Array.isArray(chat.user1) ? chat.user1[0] : chat.user1;
         const user2 = Array.isArray(chat.user2) ? chat.user2[0] : chat.user2;
-
         const contact = isUser1 ? user2 : user1;
-
         if (!contact) return null;
 
         const validMessages = (chat.messages || []).filter(msg => !msg.deleted_at);
         const lastMessage = validMessages
           .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())[0];
+
+        const unreadMessages = validMessages.filter(msg => !msg.is_read && msg.sender_id !== userId);
 
         return {
           id: contact.id,
@@ -67,6 +68,7 @@ export const useChats = () => {
           username: contact.username,
           avatar_url: contact.avatar_url,
           lastMessage: lastMessage?.content || null,
+          unreadCount: unreadMessages.length,
         } as TProfile;
       })
       .filter(Boolean) as TProfile[];
@@ -90,7 +92,9 @@ export const useChats = () => {
       // Load profile
       const storedProfile = sessionStorage.getItem('profile');
       if (storedProfile) {
-        setProfile(JSON.parse(storedProfile));
+        const parsedProfile = JSON.parse(storedProfile);
+        setProfile(parsedProfile);
+        await fetchContacts(parsedProfile.id);
       } else {
         const { data: userProfile, error: profileError } = await supabase
           .from('profiles')
@@ -101,15 +105,15 @@ export const useChats = () => {
         if (userProfile) {
           setProfile(userProfile);
           sessionStorage.setItem('profile', JSON.stringify(userProfile));
+          await fetchContacts(userProfile.id);
         } else {
           console.error('Failed to fetch profile', profileError);
         }
       }
 
-      await fetchContacts(userId);
       setLoading(false);
 
-      // 👇 Set up realtime listener for new messages
+      // 👇 Realtime listener for INSERT and UPDATE
       const messageSub = supabase
         .channel('public:messages')
         .on(
@@ -122,12 +126,12 @@ export const useChats = () => {
           async (payload) => {
             const newMessage = payload.new;
             console.log('New message:', newMessage);
-
-            // Refetch contacts on new message
-            await fetchContacts(userId);
+            if (profile?.id) {
+              await fetchContacts(profile.id);
+            }
           }
-        ).on(
-          // 👇 Listen for soft-deletes (updates where deleted_at is set)
+        )
+        .on(
           'postgres_changes',
           {
             event: 'UPDATE',
@@ -135,21 +139,46 @@ export const useChats = () => {
             table: 'messages',
           },
           async (payload) => {
-            const updatedMessage = payload.new;
-            console.log('Message updated (possibly deleted):', updatedMessage);
-            await fetchContacts(userId);
+            const oldData = payload.old;
+            const newData = payload.new;
+
+            // Jika terjadi perubahan is_read atau deleted_at
+            if (
+              oldData.is_read !== newData.is_read ||
+              oldData.deleted_at !== newData.deleted_at
+            ) {
+              console.log('Message updated:', newData);
+              if (profile?.id) {
+                await fetchContacts(profile.id);
+              }
+            }
           }
         )
         .subscribe();
 
-      // Cleanup on unmount
       return () => {
         supabase.removeChannel(messageSub);
       };
     };
 
     setup();
-  }, [router]);
+    console.log("PROFILEE?")
+  }, [router, profile?.id]);
+
+  // ✅ Refetch saat halaman kembali aktif (misalnya dari halaman chat kembali ke home)
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible' && profile?.id) {
+        console.log('Page visible again, refetching contacts...');
+        fetchContacts(profile.id);
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, [profile]);
 
   return { profile, contacts, loading };
 };

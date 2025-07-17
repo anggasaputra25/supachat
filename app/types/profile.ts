@@ -5,4 +5,5 @@ export type TProfile = {
   email?: string;
   avatar_url?: string;
   lastMessage?: string;
+  unreadCount?: number;
 };

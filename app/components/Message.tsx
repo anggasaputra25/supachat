@@ -62,14 +62,12 @@ const ComponentMessages = ({ content }: { content: TMessage[] }) => {
             <Markdown>
               {msg.deleted_at ? "Message has been deleted" : msg.content}
             </Markdown>
-            {msg.isSender && (
-              <>
-                {msg.is_read ? (
-                  <FaCheckDouble className="w-3 h-3" />
-                ) : (
-                  <FaCheck className="w-3 h-3" />
-                )}
-              </>
+            {msg.isSender && !msg.deleted_at && (
+              msg.is_read ? (
+                <FaCheckDouble className="w-3 h-3" />
+              ) : (
+                <FaCheck className="w-3 h-3" />
+              )
             )}
           </div>
 
