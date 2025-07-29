@@ -1,10 +1,14 @@
+'use client'
 import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import { TMessage } from "@/app/types/message";
 import { TProfile } from "@/app/types/profile";
+import { useRouter } from 'next/navigation';
 
 export const useChat = (username: string) => {
+  const router = useRouter();
   const [profile, setProfile] = useState<TProfile | null>(null);
+  const [recipient, setRecipient] = useState<TProfile | null>(null);
   const [messages, setMessages] = useState<TMessage[]>([]);
   const [chatId, setChatId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -41,8 +45,11 @@ export const useChat = (username: string) => {
 
       if (recipientError || !recipient) {
         console.error('Recipient not found:', recipientError);
+        router.push('/undefind');
         return;
       }
+
+      setRecipient(recipient);
 
       const { data: existingChat } = await supabase
         .from('chats')
@@ -94,7 +101,7 @@ export const useChat = (username: string) => {
     };
 
     fetchChatData();
-  }, [username]);
+  }, [username, router]);
 
   // Realtime listener for INSERT and UPDATE
   useEffect(() => {
@@ -238,6 +245,7 @@ export const useChat = (username: string) => {
 
   return {
     profile,
+    recipient,
     loading,
     messages,
     input,

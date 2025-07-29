@@ -9,12 +9,14 @@ import ComponentNavbar from '@/app/components/Navbar'
 import { ComponentNavbarSkeleton } from '@/app/components/NavbarSkeleton'
 import CardAddContact from '@/app/components/CardAddContact'
 import CardContactSkeleton from '@/app/components/CardContactSkeleton'
+import { useChats } from '@/app/hooks/useChats'
 
 const Contacts = () => {
+  const { profile, contacts, loading } = useChats();
   const router = useRouter()
-  const [loading, setLoading] = useState(true)
-  const [profile, setProfile] = useState<TProfile | null>(null)
-  const [contacts, setContacts] = useState<TProfile[]>([])
+  const [loadingContacts, setLoadingContacts] = useState(true)
+  // const [profile, setProfile] = useState<TProfile | null>(null)
+  const [myContacts, setMyContacts] = useState<TProfile[]>([])
 
   useEffect(() => {
     const checkUser = async () => {
@@ -30,25 +32,6 @@ const Contacts = () => {
 
       const userId = session.user.id
 
-      // Fetch profile (with cache check)
-      const storedProfile = sessionStorage.getItem('profile')
-      if (storedProfile) {
-        setProfile(JSON.parse(storedProfile))
-      } else {
-        const { data: userProfile, error: profileError } = await supabase
-          .from('profiles')
-          .select('*')
-          .eq('id', userId)
-          .single()
-
-        if (userProfile) {
-          setProfile(userProfile)
-          sessionStorage.setItem('profile', JSON.stringify(userProfile))
-        } else {
-          console.error('Failed to fetch profile', profileError)
-        }
-      }
-
       // Fetch contacts (with join to get contact profile info)
       const { data: contactList, error: contactsError } = await supabase
         .from('contacts')
@@ -59,10 +42,10 @@ const Contacts = () => {
         console.error('Failed to load contacts', contactsError)
       } else {
         const contactProfiles = contactList.map((item) => item.contact).flat()
-        setContacts(contactProfiles)
+        setMyContacts(contactProfiles)
       }
 
-      setLoading(false)
+      setLoadingContacts(false)
     }
 
     checkUser()
@@ -70,25 +53,27 @@ const Contacts = () => {
 
   return (
     <div>
-      {loading ? (
+      {loading || loadingContacts ? (
         <ComponentNavbarSkeleton />
       ) : (
-        <ComponentNavbar profile={profile} inPage={1}/>
+        <ComponentNavbar profile={profile} inPage={1} />
       )}
 
       <div className="flex p-5 flex-wrap">
-        {loading ? (
+        {loading || loadingContacts ? (
           <>
             <CardContactSkeleton />
             <CardContactSkeleton />
             <CardContactSkeleton />
           </>
         ) : (
-          contacts.map((contact) => (
-            <ComponentCardContact key={contact.id} profile={contact} isContact={true} />
-          ))
+          contacts
+            .filter((contact, index) => contact.id === myContacts[index]?.id)
+            .map((contact) => (
+              <ComponentCardContact key={contact.id} profile={contact} isContact={true} />
+            ))
         )}
-        {loading ? (
+        {loading || loadingContacts ? (
           <></>
         ) : (
           <CardAddContact />

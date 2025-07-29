@@ -89,7 +89,7 @@ const ComponentCardContact = ({ profile, isContact }: { profile: TProfile | null
               width={80}
               height={80}
               alt={'Profile ' + profile?.username}
-              className="w-20 rounded-sm"
+              className="w-20 h-20 min-w-20 object-cover rounded-sm"
             />
             {/* {!isRead && 
               <div className="absolute bg-red-600 -top-2 -right-2 w-5 h-5 rounded-full flex justify-center items-center"></div>

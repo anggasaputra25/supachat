@@ -11,7 +11,7 @@ import { useChat } from '@/app/hooks/useChat';
 const Chat = () => {
   const { username } = useParams();
   const {
-    profile,
+    recipient,
     loading,
     messages,
     input,
@@ -22,7 +22,7 @@ const Chat = () => {
 
   return (
     <div className="h-screen flex flex-col">
-      {loading ? <NavbarChatSkeleton /> : <NavbarChat profile={profile} />}
+      {loading ? <NavbarChatSkeleton /> : <NavbarChat recipient={recipient} />}
       <div className="h-full px-10 py-2 flex flex-col overflow-y-scroll
         [&::-webkit-scrollbar]:w-2
         [&::-webkit-scrollbar-track]:rounded-full
