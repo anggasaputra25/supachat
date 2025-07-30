@@ -30,12 +30,15 @@ const ComponentMessages = ({ content }: { content: TMessage[] }) => {
       } else {
         console.log("Message deleted");
         Swal.fire({
-          title: "Deleted!",
-          text: "Your message has been deleted.",
+          toast: true,
+          position: "top-end",
           icon: "success",
+          title: "Your message has been deleted.",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
           background: "#171717",
           color: "#fff",
-          confirmButtonColor: "#4f46e5", // Tailwind violet-700
         });
       }
     }
@@ -47,35 +50,42 @@ const ComponentMessages = ({ content }: { content: TMessage[] }) => {
         <div
           key={idx}
           className={`relative group w-fit ${msg.isSender
-              ? "self-end ml-auto rounded-l-md"
-              : "self-start mr-auto rounded-r-md"
+            ? "self-end ml-auto rounded-l-md"
+            : "self-start mr-auto rounded-r-md"
             }`}
         >
           <div
-            className={`mt-2 py-3 rounded-md rounded-t-none max-w-full w-fit text-white px-3 z-20 flex items-end gap-2 relative prose ${msg.isSender
-                ? "bg-violet-800 self-end ml-auto rounded-l-md"
-                : "bg-neutral-800 self-start mr-auto rounded-r-md"
+            className={`mt-2 py-3 rounded-md rounded-t-none max-w-full w-fit text-white px-3 z-20 flex items-end gap-2 relative prose prose-invert ${msg.isSender
+              ? "bg-violet-800 self-end ml-auto rounded-l-md"
+              : "bg-neutral-800 self-start mr-auto rounded-r-md"
               } ${msg.deleted_at ? "italic opacity-50" : ""}`}
           >
             <div className={`absolute top-0 left-0 w-full h-full sm:hidden ${msg.isSender && !msg.deleted_at ? '' : 'hidden'}`} onClick={() => handleDelete(msg.id)}></div>
-            <div>
-              <Markdown>
+            <div className="whitespace-pre-wrap break-words">
+              <Markdown
+                components={{
+                  // Custom renderer untuk paragraph agar line breaks ditampilkan
+                  p: ({ children }) => <p className="m-0 whitespace-pre-wrap">{children}</p>,
+                  // Pastikan line break ditangani dengan benar
+                  br: () => <br />,
+                }}
+              >
                 {msg.deleted_at ? "Message has been deleted" : msg.content}
               </Markdown>
             </div>
             {msg.isSender && !msg.deleted_at && (
               msg.is_read ? (
-                <FaCheckDouble className="w-3 h-3" />
+                <FaCheckDouble className="w-3 h-3 flex-shrink-0" />
               ) : (
-                <FaCheck className="w-3 h-3" />
+                <FaCheck className="w-3 h-3 flex-shrink-0" />
               )
             )}
           </div>
 
           <div
             className={`absolute end-0 transition-all duration-300 bottom-0 z-0 ps-2 cursor-pointer ${msg.isSender && !msg.deleted_at
-                ? "group-hover:-right-5 group-hover:rounded-none group-hover:opacity-100 right-0 rounded-lg opacity-0"
-                : "hidden"
+              ? "group-hover:-right-5 group-hover:rounded-none group-hover:opacity-100 right-0 rounded-lg opacity-0"
+              : "hidden"
               }`}
             onClick={() => handleDelete(msg.id)}
           >

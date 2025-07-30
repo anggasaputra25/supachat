@@ -27,7 +27,7 @@ const Chats = () => {
           </>
         ) : (
           contacts.length == 0 ? (
-            <div className="fixed h-screen w-full flex justify-center items-center top-0 -z-10">
+            <div className="fixed h-screen w-full flex justify-center items-center top-0 -z-10 text-center left-0">
               <p>No chats yet! <Link href={'contacts'} className='font-bold'>Add some friends</Link> and start something awesome 💬✨</p>
             </div>
           ) : (

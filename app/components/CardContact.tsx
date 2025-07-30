@@ -117,7 +117,15 @@ const ComponentCardContact = ({ profile, isContact }: { profile: TProfile | null
           </div>
           <div className="flex flex-col justify-center w-full">
             <h2 className="text-2xl font-bold">{profile?.name}</h2>
-            <p className="font-medium text-neutral-400">{isContact ? '@' + profile?.username : profile?.lastMessage || 'Say hello ✌'}</p>
+            <p className="font-medium text-neutral-400" title={`${isContact ? '@' + profile?.username : profile?.lastMessage || 'Say hello ✌'}`}>
+              {isContact
+                ? '@' + profile?.username
+                : profile?.lastMessage
+                  ? (profile.lastMessage.length > 40
+                    ? profile.lastMessage.slice(0, 40) + '...'
+                    : profile.lastMessage)
+                  : 'Say hello ✌'}
+            </p>
           </div>
         </Link>
 

@@ -77,7 +77,7 @@ export default function SignIn() {
   }
 
   return (
-    <div className="flex flex-col justify-center items-center min-h-screen">
+    <div className="flex flex-col justify-center items-center min-h-screen px-4">
       <h1 className="font-bold text-3xl mb-5">Welcome Back!</h1>
       <p className="font-medium text-neutral-400 mb-10">First time here? <Link href={'sign-up'} className="text-white">Sign Up for free!</Link></p>
       <form className="w-full max-w-sm mx-auto space-y-5" onSubmit={handleForm}>

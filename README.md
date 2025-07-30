@@ -8,7 +8,7 @@ SupaChat is a responsive and modern **real-time chat application** inspired by *
 
 - 💬 Real-time 1-on-1 messaging using Supabase Realtime
 - 🧑 User authentication (sign up, login, logout)
-- ✅ Message read/unread indicators (coming soon)
+- ✅ Message read/unread indicators
 - 📱 Fully responsive layout (mobile, tablet, desktop)
 - ⏱️ Optimistic UI & loading states for better UX
 
@@ -59,7 +59,7 @@ Get your API keys at [Supabase Project Settings](https://supabase.com/)
 
 | Mobile View | Desktop View |
 |-------------|--------------|
-|             |              |
+| ![Mobile](./screenshots/mobile.png) | ![Desktop](./screenshots/desktop.png) |
 
 ---
 
@@ -88,11 +88,10 @@ supachat/
 
 ## 📌 To-Do / Improvements
 
-👥 Group chat functionality
-🖼️ Image/file sharing
-🟢 Online presence indicators
-✅ Message read receipts
-🔆 Light mode
+- 👥 Group chat functionality
+- 🖼️ Image/file sharing
+- 🟢 Online presence indicators
+- 🔆 Light mode
 
 ---
 

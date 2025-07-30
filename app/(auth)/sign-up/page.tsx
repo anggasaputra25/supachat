@@ -173,8 +173,8 @@ const SignUp = () => {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center min-h-screen">
-      <h1 className="font-bold text-3xl mb-5">Hello, Welcome to Supachat!</h1>
+    <div className="flex flex-col justify-center items-center min-h-screen px-4">
+      <h1 className="font-bold text-3xl mb-5 text-center">Hello, Welcome to Supachat!</h1>
       <p className="font-medium text-neutral-400 mb-10">Have an account? <Link href={'/sign-in'} className="text-white">Sign In here!</Link></p>
       <form className="w-full max-w-sm mx-auto space-y-5" onSubmit={handleForm}>
         <div className={`flex rounded-sm bg-neutral-900 ${!usernameStatus? 'border border-red-600' : ''} ${usernameStatus && username.length > 0? 'border border-green-600' : ''}`}>

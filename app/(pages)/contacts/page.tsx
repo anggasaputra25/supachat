@@ -12,7 +12,7 @@ import CardContactSkeleton from '@/app/components/CardContactSkeleton'
 import { useChats } from '@/app/hooks/useChats'
 
 const Contacts = () => {
-  const { profile, contacts, loading } = useChats();
+  const { profile, loading } = useChats();
   const router = useRouter()
   const [loadingContacts, setLoadingContacts] = useState(true)
   // const [profile, setProfile] = useState<TProfile | null>(null)
@@ -67,8 +67,7 @@ const Contacts = () => {
             <CardContactSkeleton />
           </>
         ) : (
-          contacts
-            .filter((contact, index) => contact.id === myContacts[index]?.id)
+          myContacts
             .map((contact) => (
               <ComponentCardContact key={contact.id} profile={contact} isContact={true} />
             ))
