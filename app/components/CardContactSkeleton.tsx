@@ -1,6 +1,6 @@
 const CardContactSkeleton = () => {
   return (
-    <div className="p-3 w-1/3 animate-pulse">
+    <div className="py-2 md:p-3 w-full md:w-1/2 lg:w-1/3 animate-pulse">
       <div className="bg-neutral-900 p-3 rounded-sm flex gap-4 relative">
         <div className="w-20 h-20 min-w-20 bg-neutral-700 rounded-sm" />
 

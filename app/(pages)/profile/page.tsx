@@ -59,7 +59,7 @@ const Profile = () => {
   }, [debounceUsername, profile?.username]);
 
   const generateRandomUsername = () => {
-    const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
     const random = Array.from({ length: 6 }, () =>
       chars[Math.floor(Math.random() * chars.length)]
     ).join("");

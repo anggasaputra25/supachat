@@ -23,7 +23,7 @@ const Chat = () => {
   return (
     <div className="h-screen flex flex-col">
       {loading ? <NavbarChatSkeleton /> : <NavbarChat recipient={recipient} />}
-      <div className="h-full px-10 py-2 flex flex-col overflow-y-scroll
+      <div className="h-full px-3 md:px-10 py-2 flex flex-col overflow-y-scroll
         [&::-webkit-scrollbar]:w-2
         [&::-webkit-scrollbar-track]:rounded-full
         [&::-webkit-scrollbar-track]:bg-transparent
@@ -32,7 +32,7 @@ const Chat = () => {
       ">
         <ComponentMessages content={messages} />
       </div>
-      <div className="w-full px-10 space-y-5 mb-5">
+      <div className="w-full px-3 md:px-10 space-y-5 mb-5">
         <div className="rounded-sm bg-neutral-900 px-4 py-4 flex flex-col gap-3">
           <textarea
             required

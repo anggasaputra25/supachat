@@ -94,7 +94,7 @@ const CardAddContact = () => {
   }
 
   return (
-    <button onClick={handleAddContact} className="p-3 w-1/3 cursor-pointer">
+    <button onClick={handleAddContact} className="py-2 md:p-3 w-full md:w-1/2 lg:w-1/3 cursor-pointer">
       <div className="bg-neutral-900 p-3 rounded-sm flex gap-4">
         <div className="w-25 h-20 bg-white text-black rounded-sm flex justify-center items-center text-3xl"><FaPlus /></div>
         <div className="flex flex-col justify-center w-full items-baseline">

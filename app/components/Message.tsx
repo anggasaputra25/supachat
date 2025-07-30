@@ -39,29 +39,30 @@ const ComponentMessages = ({ content }: { content: TMessage[] }) => {
         });
       }
     }
-    };
+  };
 
   return (
     <>
       {content.map((msg, idx) => (
         <div
           key={idx}
-          className={`relative group w-fit ${
-            msg.isSender
+          className={`relative group w-fit ${msg.isSender
               ? "self-end ml-auto rounded-l-md"
               : "self-start mr-auto rounded-r-md"
-          }`}
+            }`}
         >
           <div
-            className={`mt-2 py-3 rounded-md rounded-t-none max-w-full w-fit text-white px-3 z-20 flex items-end gap-2 prose ${
-              msg.isSender
+            className={`mt-2 py-3 rounded-md rounded-t-none max-w-full w-fit text-white px-3 z-20 flex items-end gap-2 relative prose ${msg.isSender
                 ? "bg-violet-800 self-end ml-auto rounded-l-md"
                 : "bg-neutral-800 self-start mr-auto rounded-r-md"
-            } ${msg.deleted_at ? "italic opacity-50" : ""}`}
+              } ${msg.deleted_at ? "italic opacity-50" : ""}`}
           >
-            <Markdown>
-              {msg.deleted_at ? "Message has been deleted" : msg.content}
-            </Markdown>
+            <div className={`absolute top-0 left-0 w-full h-full sm:hidden ${msg.isSender && !msg.deleted_at ? '' : 'hidden'}`} onClick={() => handleDelete(msg.id)}></div>
+            <div>
+              <Markdown>
+                {msg.deleted_at ? "Message has been deleted" : msg.content}
+              </Markdown>
+            </div>
             {msg.isSender && !msg.deleted_at && (
               msg.is_read ? (
                 <FaCheckDouble className="w-3 h-3" />
@@ -72,11 +73,10 @@ const ComponentMessages = ({ content }: { content: TMessage[] }) => {
           </div>
 
           <div
-            className={`absolute end-0 transition-all duration-300 bottom-0 z-0 ps-2 cursor-pointer ${
-              msg.isSender && !msg.deleted_at
+            className={`absolute end-0 transition-all duration-300 bottom-0 z-0 ps-2 cursor-pointer ${msg.isSender && !msg.deleted_at
                 ? "group-hover:-right-5 group-hover:rounded-none group-hover:opacity-100 right-0 rounded-lg opacity-0"
                 : "hidden"
-            }`}
+              }`}
             onClick={() => handleDelete(msg.id)}
           >
             <FaRegTrashAlt />
