@@ -2,6 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import { Send, Sparkles, ArrowRight, Github } from 'lucide-react';
+import Link from 'next/link';
+import AOS from 'aos'
+import 'aos/dist/aos.css'
 
 export default function Home() {
   const [isVisible, setIsVisible] = useState(false);
@@ -9,6 +12,14 @@ export default function Home() {
   useEffect(() => {
     setIsVisible(true);
   }, []);
+
+  useEffect(() => {
+    AOS.init({
+      duration: 1000,
+      once: false,
+      offset: 50,
+    })
+  }, [])
 
   return (
     <main className="min-h-screen bg-gradient-to-br text-white overflow-hidden relative">
@@ -39,12 +50,12 @@ export default function Home() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 mt-8">
-            <button className="group relative bg-gradient-to-r from-violet-600 to-purple-600 px-8 py-4 rounded-2xl font-bold text-lg transition-all duration-300 hover:scale-105">
+            <Link href={'/home'} className="cursor-pointer group relative bg-gradient-to-r from-violet-600 to-purple-600 px-8 py-4 rounded-2xl font-bold text-lg transition-all duration-300 hover:scale-105">
               <span className="relative flex items-center gap-2">
                 🚀 Start Chatting
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </span>
-            </button>
+            </Link>
             
             <a
               href="https://github.com/anggasaputra25/supachat"
@@ -126,9 +137,9 @@ export default function Home() {
       </section>
 
       {/* Features */}
-      <section className="max-w-6xl mx-auto px-4 py-16">
-        <h2 className="text-4xl font-bold text-center mb-12">✨ Features</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-10 text-center">
+      <section className="max-w-6xl mx-auto px-4 py-16 min-h-screen">
+        <h2 data-aos="fade-left" className="text-4xl font-bold text-center mb-12">✨ Features</h2>
+        <div data-aos="fade-right" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-10 text-center">
           <div className="bg-neutral-900 border border-white/5 p-6 rounded-xl shadow-md hover:scale-105 transition">
             <h3 className="text-xl font-semibold mb-2">💬 Real-Time Messaging</h3>
             <p className="text-gray-300">Send and receive messages instantly with Supabase Realtime.</p>
