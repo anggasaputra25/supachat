@@ -1,10 +1,10 @@
 'use client';
 
-import ComponentCardContact from '@/app/components/CardContact';
-import ComponentNavbar from '@/app/components/Navbar';
-import { ComponentNavbarSkeleton } from '@/app/components/NavbarSkeleton';
-import CardContactSkeleton from '@/app/components/CardContactSkeleton';
-import { useChats } from '@/app/hooks/useChats';
+import ComponentCardContact from '@/components/CardContact';
+import ComponentNavbar from '@/components/Navbar';
+import { ComponentNavbarSkeleton } from '@/components/NavbarSkeleton';
+import CardContactSkeleton from '@/components/CardContactSkeleton';
+import { useChats } from '@/hooks/useChats';
 import Link from 'next/link';
 
 const Chats = () => {

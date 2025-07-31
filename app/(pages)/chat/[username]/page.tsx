@@ -1,12 +1,12 @@
 'use client';
 
 import { useParams } from 'next/navigation';
-import NavbarChat from '@/app/components/NavbarChat';
-import NavbarChatSkeleton from '@/app/components/NavbarChatSkeleton';
-import ComponentMessages from '@/app/components/Message';
+import NavbarChat from '@/components/NavbarChat';
+import NavbarChatSkeleton from '@/components/NavbarChatSkeleton';
+import ComponentMessages from '@/components/Message';
 import { HiPaperAirplane } from 'react-icons/hi';
 import { FaPlus } from 'react-icons/fa';
-import { useChat } from '@/app/hooks/useChat';
+import { useChat } from '@/hooks/useChat';
 
 const Chat = () => {
   const { username } = useParams();

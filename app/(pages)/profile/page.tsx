@@ -1,8 +1,8 @@
 'use client'
-import LogoutButton from "@/app/components/LogoutButton";
-import ComponentNavbar from "@/app/components/Navbar";
-import { ComponentNavbarSkeleton } from "@/app/components/NavbarSkeleton";
-import { useChats } from "@/app/hooks/useChats";
+import LogoutButton from "@/components/LogoutButton";
+import ComponentNavbar from "@/components/Navbar";
+import { ComponentNavbarSkeleton } from "@/components/NavbarSkeleton";
+import { useChats } from "@/hooks/useChats";
 import { supabase } from "@/lib/supabaseClient";
 import Image from "next/image";
 import Link from "next/link";

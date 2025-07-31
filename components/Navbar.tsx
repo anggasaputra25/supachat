@@ -1,4 +1,4 @@
-import { TProfile } from "@/app/types/profile";
+import { TProfile } from "@/types/profile";
 import { BiMessageSquareDetail } from "react-icons/bi";
 import { GoPerson } from "react-icons/go";
 import Link from "next/link";

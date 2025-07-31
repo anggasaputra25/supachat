@@ -1,8 +1,8 @@
 'use client'
 import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { supabase } from "@/lib/supabaseClient";
-import { TMessage } from "@/app/types/message";
-import { TProfile } from "@/app/types/profile";
+import { TMessage } from "@/types/message";
+import { TProfile } from "@/types/profile";
 import { useRouter } from 'next/navigation';
 
 export const useChat = (username: string) => {

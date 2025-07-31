@@ -3,13 +3,13 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabaseClient'
 import { useRouter } from 'next/navigation'
-import { TProfile } from '@/app/types/profile'
-import ComponentCardContact from '@/app/components/CardContact'
-import ComponentNavbar from '@/app/components/Navbar'
-import { ComponentNavbarSkeleton } from '@/app/components/NavbarSkeleton'
-import CardAddContact from '@/app/components/CardAddContact'
-import CardContactSkeleton from '@/app/components/CardContactSkeleton'
-import { useChats } from '@/app/hooks/useChats'
+import { TProfile } from '@/types/profile'
+import ComponentCardContact from '@/components/CardContact'
+import ComponentNavbar from '@/components/Navbar'
+import { ComponentNavbarSkeleton } from '@/components/NavbarSkeleton'
+import CardAddContact from '@/components/CardAddContact'
+import CardContactSkeleton from '@/components/CardContactSkeleton'
+import { useChats } from '@/hooks/useChats'
 
 const Contacts = () => {
   const { profile, loading } = useChats();

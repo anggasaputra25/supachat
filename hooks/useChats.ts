@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { supabase } from '@/lib/supabaseClient';
 import { useRouter } from 'next/navigation';
-import { TProfile } from '@/app/types/profile';
+import { TProfile } from '@/types/profile';
 import { RealtimeChannel } from '@supabase/supabase-js';
 
 export const useChats = () => {
